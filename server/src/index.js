@@ -12,14 +12,17 @@ const log = require('./api/logs');
 const app = express();
 
 mongoose.connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true
-});
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('Connected to MongoDB...')).catch((err) => console.error("Coudn't connect MongoDB....", err));
 
 app.use(morgan('common'));
 app.use(helmet());
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
 }));
+
+app.use(express.json());
 
 app.get('/', (request, response) => {
     return response.json({
